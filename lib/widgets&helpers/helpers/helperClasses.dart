@@ -10,9 +10,9 @@ class HelperClass {
   static const logo = imageBaseUrl + 'logo.png';
   static const verificationImage = imageBaseUrl + 'verificaton.gif';
   static const googleKey = 'AIzaSyADOnetDD3Rz5sEVeZoawAAkvF0Pw6rk5c';
-  static const oneSignalAppId = 'a871a72d-d389-4c04-a52d-40ed65b89e0f';
+  static const oneSignalAppId = 'f4380f75-f8d2-4cec-9c95-dded133cc259';
   static const mapBoxKey = 'pk.eyJ1IjoibWdwYXR0byIsImEiOiJja281ZG9vdjgwNDhxMzFwZG1zbmdraWM3In0.6SfIgfO4VXTqO7oWqQO-YA';
-  static const oneSignalRestApiKey = 'MDY3ZDQxNTEtNTM2ZC00ZGQ2LThlNzQtZWE2NWNmYmZiNmVi';
+  static const oneSignalRestApiKey = 'MmZiNDA0OGUtZTlkMy00ZDFkLTliZTctOWQ3MGZhZmE0OGFh';
   static const oneSignalPostUrl = 'https://onesignal.com/api/v1/notifications';
   static const pickUplocationMarker = imageBaseUrl + 'locationMarker.png';
   static const dropOfflocationMarker = imageBaseUrl + 'dropOfflocationMarker.png';

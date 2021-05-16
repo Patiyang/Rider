@@ -224,21 +224,15 @@ class _HomeMainState extends State<HomeMain> with SingleTickerProviderStateMixin
       OneSignal.shared.setInFocusDisplayType(OSNotificationDisplayType.notification);
       OneSignal.shared.setExternalUserId(_auth.currentUser.uid);
 
-      OneSignal.shared.setNotificationReceivedHandler((OSNotification notification) {
-        // print(notification.payload.title);
-        var id = Uuid();
-        String channelId = notification.payload.notificationId;
-        String channelName = notification.payload.title;
-        String channelDescription = notification.payload.subtitle;
-        AndroidNotificationDetails androidNotificationDetails = new AndroidNotificationDetails(channelId, channelName, channelDescription);
-        // showEmailDialog(androidNotificationDetails, context, notification);
-      });
+      OneSignal.shared.setNotificationReceivedHandler((OSNotification notification) {});
       OneSignal.shared.setNotificationOpenedHandler((OSNotificationOpenedResult result) {
-        print('clicked');
+        print(result.notification.payload.notificationId);
       });
       OneSignal.shared.setInAppMessageClickedHandler((OSInAppMessageAction action) {
         print('inapp clicked');
       });
+
+      // OneSignal.shared.
     } else {
       OneSignal.shared.removeExternalUserId();
       print('object');

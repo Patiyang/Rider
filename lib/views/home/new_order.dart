@@ -10,6 +10,7 @@ import 'package:delivery_boy/widgets&helpers/widgets/loading.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class NewOrder extends StatefulWidget {
   final bool online;
@@ -37,7 +38,9 @@ class _NewOrderState extends State<NewOrder> {
   Function mathFunc = (Match match) => '${match[1]},';
   HashMap<String, Object> testTriggers = new HashMap<String, Object>();
   bool loading = false;
-
+  bool acceptOderPermission = false;
+  var permission = Permission.location.status;
+  // var grantPermision = Permission.location.request();
   @override
   void initState() {
     super.initState();
@@ -228,9 +231,13 @@ class _NewOrderState extends State<NewOrder> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: <Widget>[
-                                      Text(
-                                        courierModel.paymentMode == 'cash' ? 'Payable Amount On delivery' : 'Amount Paid',
-                                        style: listItemTitleStyle,
+                                      Expanded(
+                                        child: CustomText(
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          text: courierModel.paymentMode == 'cash' ? 'Payable Amount' : 'Amount Paid',
+                                          // style: listItemTitleStyle,
+                                        ),
                                       ),
                                       Text(
                                         '${HelperClass.naira} ${courierModel.earnings.ceilToDouble().toString().replaceAllMapped(reg, mathFunc)}0',
@@ -529,29 +536,34 @@ class _NewOrderState extends State<NewOrder> {
                         children: <Widget>[
                           InkWell(
                             onTap: () async {
-                              String pushMessage = 'The Order #${courierModel.orderNumber} has been Accepted by $firstName $lastName who will be with you soon';
-                              if (activeRequsts.length > 0) {
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                    backgroundColor: greyColor[400],
-                                    content: CustomText(
-                                      text: 'You already have an ongoing order',
-                                      color: Colors.red,
-                                      textAlign: TextAlign.center,
-                                      fontWeight: FontWeight.bold,
-                                      size: 16,
-                                    )));
-                              } else {
-                                await _courierServices.updateAcceptedOrder(_auth.currentUser.uid, courierModel.serviceId).then((value) {
-                                  setState(() {
-                                    serviceRequests.removeAt(serviceRequests.indexOf(courierModel));
-                                    oneSignalPush.sendNotification(context, courierModel.senderId, pushMessage,
-                                        'Order #${courierModel.orderNumber} for${courierModel.packageType} has been accepted');
+                              if (acceptOderPermission == true) {
+                                String pushMessage =
+                                    'The Order #${courierModel.orderNumber} has been Accepted by $firstName $lastName who will be with you soon';
+                                if (activeRequsts.length > 0) {
+                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                      backgroundColor: greyColor[400],
+                                      content: CustomText(
+                                        text: 'You already have an ongoing order',
+                                        color: Colors.red,
+                                        textAlign: TextAlign.center,
+                                        fontWeight: FontWeight.bold,
+                                        size: 16,
+                                      )));
+                                } else {
+                                  await _courierServices.updateAcceptedOrder(_auth.currentUser.uid, courierModel.serviceId).then((value) {
+                                    setState(() {
+                                      serviceRequests.removeAt(serviceRequests.indexOf(courierModel));
+                                      oneSignalPush.sendNotification(context, courierModel.senderId, pushMessage,
+                                          'Order #${courierModel.orderNumber} for${courierModel.packageType} has been accepted');
+                                    });
+                                    Fluttertoast.showToast(msg: 'You have accepted Order #${courierModel.orderNumber}');
                                   });
-                                  Fluttertoast.showToast(msg: 'You have accepted Order #${courierModel.orderNumber}');
-                                });
+                                }
+                                Navigator.pop(context);
+                              } else {
+                                print('object');
+                                await Permission.location.request();
                               }
-
-                              Navigator.pop(context);
                             },
                             child: Container(
                               width: (width / 3.5),
@@ -611,7 +623,7 @@ class _NewOrderState extends State<NewOrder> {
                         ? Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8.0),
                             child: Center(
-                                  child: Column(
+                              child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Image.asset(
@@ -630,7 +642,8 @@ class _NewOrderState extends State<NewOrder> {
                                     textAlign: TextAlign.center,
                                   ),
                                 ],
-                              ),),
+                              ),
+                            ),
                           )
                         : ListView(
                             children: <Widget>[
@@ -827,7 +840,9 @@ class _NewOrderState extends State<NewOrder> {
       }).then((value) async {
         serviceRequests = await _courierServices.getServiceRequests(vehicleType);
         activeRequsts = await _courierServices.getActiveServiceRequests(vehicleType);
-        // print(activeRequsts.length.toString() + "");
+        print(activeRequsts.length.toString() + "");
+        acceptOderPermission = await permission.isGranted;
+
         if (mounted) {
           setState(() {
             loading = false;

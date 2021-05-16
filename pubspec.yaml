@@ -58,6 +58,7 @@ dependencies:
   map_launcher: ^2.0.0
   flutter_local_notifications: ^5.0.0+4
   flutter_native_timezone: ^1.0.10
+  permission_handler: ^7.1.0
 
 # dev_dependencies:
 #   flutter_test:

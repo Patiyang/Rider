@@ -434,6 +434,18 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "permission_handler",
+      "rootUri": "file:///home/patto/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-7.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "permission_handler_platform_interface",
+      "rootUri": "file:///home/patto/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler_platform_interface-3.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "persistent_bottom_nav_bar",
       "rootUri": "file:///home/patto/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/persistent_bottom_nav_bar-4.0.2",
       "packageUri": "lib/",
@@ -632,7 +644,7 @@
       "languageVersion": "2.7"
     }
   ],
-  "generated": "2021-05-14T08:02:32.985146Z",
+  "generated": "2021-05-16T12:25:42.894855Z",
   "generator": "pub",
   "generatorVersion": "2.12.3"
 }

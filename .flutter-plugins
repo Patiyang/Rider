@@ -22,6 +22,7 @@ map_launcher=/home/patto/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartl
 onesignal_flutter=/home/patto/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/onesignal_flutter-2.6.3/
 path_provider_linux=/home/patto/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_linux-2.0.0/
 path_provider_windows=/home/patto/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_windows-2.0.1/
+permission_handler=/home/patto/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-7.1.0/
 shared_preferences=/home/patto/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-2.0.5/
 shared_preferences_linux=/home/patto/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_linux-2.0.0/
 shared_preferences_macos=/home/patto/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_macos-2.0.0/

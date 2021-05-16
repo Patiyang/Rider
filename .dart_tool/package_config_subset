@@ -282,6 +282,14 @@ pedantic
 2.12
 file:///home/patto/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/pedantic-1.11.0/
 file:///home/patto/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/pedantic-1.11.0/lib/
+permission_handler
+2.12
+file:///home/patto/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-7.1.0/
+file:///home/patto/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-7.1.0/lib/
+permission_handler_platform_interface
+2.12
+file:///home/patto/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler_platform_interface-3.3.0/
+file:///home/patto/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler_platform_interface-3.3.0/lib/
 persistent_bottom_nav_bar
 2.12
 file:///home/patto/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/persistent_bottom_nav_bar-4.0.2/

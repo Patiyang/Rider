@@ -5,6 +5,7 @@ import 'package:delivery_boy/services/courierServices.dart';
 import 'package:delivery_boy/services/oneSignalPush.dart';
 import 'package:delivery_boy/services/userServices.dart';
 import 'package:delivery_boy/widgets&helpers/helpers/helperClasses.dart';
+import 'package:delivery_boy/widgets&helpers/widgets/customButton.dart';
 import 'package:delivery_boy/widgets&helpers/widgets/customText.dart';
 import 'package:delivery_boy/widgets&helpers/widgets/loading.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -534,8 +535,11 @@ class _NewOrderState extends State<NewOrder> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
-                          InkWell(
-                            onTap: () async {
+                          CustomFlatButton(
+                            text: 'Accept',
+                            callback: () async {
+                              Fluttertoast.showToast(msg: 'Please wait...');
+
                               if (acceptOderPermission == true) {
                                 String pushMessage =
                                     'The Order #${courierModel.orderNumber} has been Accepted by $firstName $lastName who will be with you soon';
@@ -550,35 +554,77 @@ class _NewOrderState extends State<NewOrder> {
                                         size: 16,
                                       )));
                                 } else {
-                                  await _courierServices.updateAcceptedOrder(_auth.currentUser.uid, courierModel.serviceId).then((value) {
-                                    setState(() {
-                                      serviceRequests.removeAt(serviceRequests.indexOf(courierModel));
-                                      oneSignalPush.sendNotification(context, courierModel.senderId, pushMessage,
-                                          'Order #${courierModel.orderNumber} for${courierModel.packageType} has been accepted');
+                                  try {
+                                    await _courierServices.updateAcceptedOrder(_auth.currentUser.uid, courierModel.serviceId).then((value) {
+                                      setState(() {
+                                        serviceRequests.removeAt(serviceRequests.indexOf(courierModel));
+                                        oneSignalPush.sendNotification(context, courierModel.senderId, pushMessage,
+                                            'Order #${courierModel.orderNumber} for${courierModel.packageType} has been accepted');
+                                      });
+                                      Fluttertoast.showToast(msg: 'You have accepted Order #${courierModel.orderNumber}');
                                     });
-                                    Fluttertoast.showToast(msg: 'You have accepted Order #${courierModel.orderNumber}');
-                                  });
+                                    Navigator.pop(context);
+                                  } catch (e) {
+                                    Fluttertoast.showToast(msg: 'An error was encountered when processing this order');
+                                    Navigator.pop(context);
+                                    print(e.toString());
+                                  }
                                 }
-                                Navigator.pop(context);
+                                // Navigator.pop(context);
                               } else {
                                 print('object');
                                 await Permission.location.request();
                               }
                             },
-                            child: Container(
-                              width: (width / 3.5),
-                              alignment: Alignment.center,
-                              padding: EdgeInsets.all(10.0),
-                              decoration: BoxDecoration(
-                                color: primaryColor,
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                              child: Text(
-                                'Accept',
-                                style: wbuttonWhiteTextStyle,
-                              ),
-                            ),
+                            radius: 5,
+                            width: (width / 3.5),
+                            textColor: whiteColor,
                           ),
+                          // InkWell(
+                          //   onTap: () async {
+                          //     if (acceptOderPermission == true) {
+                          //       String pushMessage =
+                          //           'The Order #${courierModel.orderNumber} has been Accepted by $firstName $lastName who will be with you soon';
+                          //       if (activeRequsts.length > 0) {
+                          //         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          //             backgroundColor: greyColor[400],
+                          //             content: CustomText(
+                          //               text: 'You already have an ongoing order',
+                          //               color: Colors.red,
+                          //               textAlign: TextAlign.center,
+                          //               fontWeight: FontWeight.bold,
+                          //               size: 16,
+                          //             )));
+                          //       } else {
+                          //         await _courierServices.updateAcceptedOrder(_auth.currentUser.uid, courierModel.serviceId).then((value) {
+                          //           setState(() {
+                          //             serviceRequests.removeAt(serviceRequests.indexOf(courierModel));
+                          //             oneSignalPush.sendNotification(context, courierModel.senderId, pushMessage,
+                          //                 'Order #${courierModel.orderNumber} for${courierModel.packageType} has been accepted');
+                          //           });
+                          //           Fluttertoast.showToast(msg: 'You have accepted Order #${courierModel.orderNumber}');
+                          //         });
+                          //       }
+                          //       Navigator.pop(context);
+                          //     } else {
+                          //       print('object');
+                          //       await Permission.location.request();
+                          //     }
+                          //   },
+                          //   child: Container(
+                          //     width: (width / 3.5),
+                          //     alignment: Alignment.center,
+                          //     padding: EdgeInsets.all(10.0),
+                          //     decoration: BoxDecoration(
+                          //       color: primaryColor,
+                          //       borderRadius: BorderRadius.circular(5.0),
+                          //     ),
+                          //     child: Text(
+                          //       'Accept',
+                          //       style: wbuttonWhiteTextStyle,
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                       heightSpace,
@@ -724,22 +770,12 @@ class _NewOrderState extends State<NewOrder> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: <Widget>[
-                                      InkWell(
-                                        onTap: () => orderAcceptDialog(item),
-                                        borderRadius: BorderRadius.circular(5.0),
-                                        child: Container(
-                                          height: 40.0,
-                                          width: 100.0,
-                                          alignment: Alignment.center,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(5.0),
-                                            color: primaryColor,
-                                          ),
-                                          child: Text(
-                                            'Order Details',
-                                            style: wbuttonWhiteTextStyle,
-                                          ),
-                                        ),
+                                      CustomFlatButton(
+                                        text: 'Order Details',
+                                        callback: () => orderAcceptDialog(item),
+                                        radius: 5,
+                                        width: 100,
+                                        textColor: whiteColor,
                                       ),
                                       heightSpace,
                                       Text('Payment', style: lightGreyStyle),

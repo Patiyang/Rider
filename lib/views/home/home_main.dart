@@ -8,7 +8,9 @@ import 'package:delivery_boy/widgets&helpers/widgets/customText.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:transparent_image/transparent_image.dart';
 import 'package:uuid/uuid.dart';
 import 'active_order.dart';
 import 'history.dart';
@@ -31,6 +33,7 @@ class _HomeMainState extends State<HomeMain> with SingleTickerProviderStateMixin
   String profilePicture = '';
   bool online = false;
   bool verified = false;
+  bool loading = false;
   bool loaded;
   AndroidNotificationSound androidNotificationSound;
   List<String> title = ['New Orders', 'Active Orders', 'History'];
@@ -63,10 +66,28 @@ class _HomeMainState extends State<HomeMain> with SingleTickerProviderStateMixin
           children: [
             ClipOval(
               child: Container(
+               
                 width: 35.0,
                 height: 35.0,
-                child: profilePicture == '' ? Image.asset(HelperClass.noImage) : Image.network(profilePicture, fit: BoxFit.cover),
-                decoration: BoxDecoration(
+                child: Container(
+                  child: loading == true
+                      ? SpinKitFadingCircle(
+                          color: whiteColor,
+                          size: 13,
+                        )
+                      : profilePicture == ''
+                          ? Image.asset(HelperClass.noImage)
+                          : Stack(alignment: Alignment.center,fit: StackFit.expand,
+                            children: [
+                              SpinKitFadingCircle(
+                          color: whiteColor,
+                          size: 13,
+                        ),
+                              FadeInImage.memoryNetwork(placeholder: kTransparentImage, image: profilePicture, fit: BoxFit.cover,),
+                            ],
+                          ),
+                ),
+                decoration: BoxDecoration( color: primaryColor[300],
                   shape: BoxShape.circle,
                   //  border: Border.all(color: whiteColor),
                 ),
@@ -99,7 +120,7 @@ class _HomeMainState extends State<HomeMain> with SingleTickerProviderStateMixin
             },
           )
         ],
-        toolbarHeight: 100,
+        toolbarHeight: 90,
         bottom: TabBar(
             onTap: (index) {
               setState(() {
@@ -122,6 +143,9 @@ class _HomeMainState extends State<HomeMain> with SingleTickerProviderStateMixin
   }
 
   getCurrentUserDetails() async {
+    setState(() {
+      loading = true;
+    });
     await userServices.getUserById(_auth.currentUser.uid).then((value) {
       setState(() {
         userNames = value.firstName + ' ' + value.lastName;
@@ -132,6 +156,7 @@ class _HomeMainState extends State<HomeMain> with SingleTickerProviderStateMixin
       online = await getIsOnline();
       print(online);
       setState(() {
+        loading = false;
         loaded = true;
       });
       initializeOneSignal(context);

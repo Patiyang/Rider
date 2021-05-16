@@ -5,9 +5,11 @@ import 'package:delivery_boy/widgets&helpers/helpers/changeScreen.dart';
 import 'package:delivery_boy/widgets&helpers/helpers/helperClasses.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:delivery_boy/views/profile/edit_profile.dart';
 import 'package:delivery_boy/views/notification.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -18,9 +20,10 @@ class _ProfileState extends State<Profile> {
   FirebaseAuth auth = FirebaseAuth.instance;
   UserServices userServices = new UserServices();
   String phoneNumber = '';
-  String profilePicture ;
+  String profilePicture;
   String firstName = '';
   String lastName = '';
+  bool loading = false;
   @override
   void initState() {
     getCurrentUserDetails();
@@ -68,8 +71,32 @@ class _ProfileState extends State<Profile> {
                         child: Container(
                           width: 70.0,
                           height: 70.0,
-                          child: profilePicture == null ? Image.asset(HelperClass.noImage) : Image.network(profilePicture, fit: BoxFit.cover),
+                          child: Container(
+                            child: loading == true
+                                ? SpinKitFadingCircle(
+                                    color: whiteColor,
+                                    size: 13,
+                                  )
+                                : profilePicture == ''
+                                    ? Image.asset(HelperClass.noImage)
+                                    : Stack(
+                                        alignment: Alignment.center,
+                                        fit: StackFit.expand,
+                                        children: [
+                                          SpinKitFadingCircle(
+                                            color: whiteColor,
+                                            size: 13,
+                                          ),
+                                          FadeInImage.memoryNetwork(
+                                            placeholder: kTransparentImage,
+                                            image: profilePicture,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ],
+                                      ),
+                          ),
                           decoration: BoxDecoration(
+                            color: greyColor[300],
                             shape: BoxShape.circle,
                             //  border: Border.all(color: whiteColor),
                           ),
@@ -276,6 +303,9 @@ class _ProfileState extends State<Profile> {
   }
 
   getCurrentUserDetails() async {
+    setState(() {
+      loading = true;
+    });
     await userServices.getUserById(auth.currentUser.uid).then((value) {
       print(value.phoneNumber);
       setState(() {
@@ -284,6 +314,9 @@ class _ProfileState extends State<Profile> {
         firstName = value.firstName;
         lastName = value.lastName;
       });
+    });
+      setState(() {
+      loading = false;
     });
   }
 }

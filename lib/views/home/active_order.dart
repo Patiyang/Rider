@@ -15,6 +15,7 @@ import 'package:delivery_boy/widgets&helpers/widgets/textField.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -59,31 +60,33 @@ class _ActiveOrderState extends State<ActiveOrder> {
   @override
   Widget build(BuildContext context) {
     return widget.online == false
-        ? Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    HelperClass.offline,
-                    fit: BoxFit.contain,
-                    height: 70,
-                    width: 250,
-                  ),
-                  SizedBox(height: 10),
-                  CustomText(
-                    text: 'You\'re currently offline, Change your online status to view the lates order requests',
-                    size: 17,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: .3,
-                    maxLines: 4,
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+        ? Container(
+          child:widget.loaded==true? Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      HelperClass.offline,
+                      fit: BoxFit.contain,
+                      height: 70,
+                      width: 250,
+                    ),
+                    SizedBox(height: 10),
+                    CustomText(
+                      text: 'You\'re currently offline, Change your online status to view the lates order requests',
+                      size: 17,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: .3,
+                      maxLines: 4,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
-            ),
-          )
+            ):SpinKitFadingCube(color: blackColor,size: 20),
+        )
         : Container(
             child: serviceRequests.length == 0
                 ? Center(

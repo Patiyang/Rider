@@ -30,7 +30,7 @@
 .pub-cache/
 .pub/
 /build/
-/lib/widgets&helpers/helpers/changeScreen.dart
+/lib/widgets&helpers/helpers/helperClasses.dart
 
 # Web related
 lib/generated_plugin_registrant.dart
